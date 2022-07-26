@@ -1,6 +1,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-@include('admin.plans._tmp_nav')
+@include('user.subscription._tmp_nav')
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
 <script src="https://js.stripe.com/v3/"></script>
