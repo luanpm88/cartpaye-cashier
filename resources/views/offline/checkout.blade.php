@@ -1,22 +1,10 @@
-@extends('layouts.core.frontend')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-@section('title', trans('messages.subscriptions'))
+@include('admin.plans._tmp_nav')
 
-@section('page_header')
-
-    <div class="page-title">
-        <ul class="breadcrumb breadcrumb-caret position-right">
-            <li class="breadcrumb-item"><a href="{{ \Acelle\Cashier\Cashier::lr_action("HomeController@index") }}">{{ trans('messages.home') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('messages.subscription') }}</li>
-        </ul>
-    </div>
-
-@endsection
-
-@section('content')
-
-    @include("account._menu", ['tab' => 'subscription'])
-
+<div class="container pt-5">    
+    
+    
     <div class="row">
         <div class="col-md-6">
             <h2>{!! trans('cashier::messages.pay_invoice') !!}</h2>  
@@ -56,4 +44,5 @@
             ])
         </div>
     </div>
-@endsection
+
+</div>

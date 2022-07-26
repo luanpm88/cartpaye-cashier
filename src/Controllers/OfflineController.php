@@ -32,7 +32,7 @@ class OfflineController extends Controller
                 Billing::enablePaymentGateway($gateway->getType());
             }
 
-            return redirect()->action('Admin\PaymentController@index');
+            return redirect()->action('App\Http\Controllers\Admin\PaymentController@index');
         }
 
         return view('cashier::offline.settings', [

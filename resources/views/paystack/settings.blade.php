@@ -7,7 +7,7 @@
     <div class="page-title">
         <ul class="breadcrumb breadcrumb-caret position-right">
             <li class="breadcrumb-item"><a href="{{ action("HomeController@index") }}">{{ trans('messages.home') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ action("Admin\PaymentController@index") }}">{{ trans('messages.payment_gateways') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ action("App\Http\Controllers\Admin\PaymentController@index") }}">{{ trans('messages.payment_gateways') }}</a></li>
             <li class="breadcrumb-item active">{{ trans('messages.update') }}</li>
         </ul>
         <h1>
@@ -15,7 +15,6 @@
         </h1>
     </div>
 
-@endsection
 
 @section('content')
 		<div class="row">
@@ -65,9 +64,7 @@
                 @else
                     <input type="submit" name="enable_gateway" class="btn btn-primary me-1" value="{{ trans('cashier::messages.connect') }}" />
                 @endif
-                <a class="btn btn-default" href="{{ action('Admin\PaymentController@index') }}">{{ trans('messages.cancel') }}</a>
+                <a class="btn btn-default" href="{{ action('App\Http\Controllers\Admin\PaymentController@index') }}">{{ trans('messages.cancel') }}</a>
             </div>
 
         </form>
-
-@endsection

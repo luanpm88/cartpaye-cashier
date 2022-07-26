@@ -1,54 +1,47 @@
-@extends('layouts.core.backend')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-@section('title', trans('cashier::messages.stripe'))
+@include('admin.plans._tmp_nav')
 
-@section('page_header')
-
-    <div class="page-title">
-        <ul class="breadcrumb breadcrumb-caret position-right">
-            <li class="breadcrumb-item"><a href="{{ action("HomeController@index") }}">{{ trans('messages.home') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ action("Admin\PaymentController@index") }}">{{ trans('messages.payment_gateways') }}</a></li>
-            <li class="breadcrumb-item active">{{ trans('messages.update') }}</li>
-        </ul>
-        <h1>
-            <span class="text-semibold"><i class="icon-credit-card2"></i> {{ trans('cashier::messages.stripe') }}</span>
-        </h1>
-    </div>
-
-@endsection
-
-@section('content')
-		<div class="row">
+<div class="container pt-5">    
+    
+    <div class="row">
 			<div class="col-md-6">
 				<p>
 					{!! trans('cashier::messages.stripe.intro') !!}
 				</p>
+
+                @if (count($errors) > 0)
+                    <!-- Form Error List -->
+                    <div class="alert alert-danger alert-noborder alert-dismissible">        
+                        <ul class="m-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 			</div>
 		</div>
-			
+        
+
 		<h3>{{ trans('cashier::messages.payment.options') }}</h3>
 
         <form enctype="multipart/form-data" action="{{ $gateway->getSettingsUrl() }}" method="POST" class="form-validate-jquery">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-md-6">
-                    @include('helpers.form_control', [
-                        'type' => 'text',
-                        'name' => 'publishable_key',
-                        'value' => $gateway->getPublishableKey(),
-                        'label' => trans('cashier::messages.stripe.publishable_key'),
-                        'help_class' => 'payment',
-                        'rules' => ['publishable_key' => 'required'],
-                    ])
 
-                    @include('helpers.form_control', [
-                        'type' => 'text',
-                        'name' => 'secret_key',
-                        'value' => $gateway->getSecretKey(),
-                        'label' => trans('cashier::messages.stripe.secret_key'),
-                        'help_class' => 'payment',
-                        'rules' => ['secretKey' => 'required'],
-                    ])
+                    <div class="mb-3">
+                        <label class="form-label">Publishable Key</label>
+                        <input type="text" name="publishable_key" class="form-control" value="{{ $gateway->getPublishableKey() }}" required="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Secret Key</label>
+                        <input type="text" name="secret_key" class="form-control" value="{{ $gateway->getSecretKey() }}" required="">
+                    </div>
                 </div>
             </div>
 
@@ -65,9 +58,8 @@
                 @else
                     <input type="submit" name="enable_gateway" class="btn btn-primary me-1" value="{{ trans('cashier::messages.connect') }}" />
                 @endif
-                <a class="btn btn-default" href="{{ action('Admin\PaymentController@index') }}">{{ trans('messages.cancel') }}</a>
+                <a class="btn btn-default" href="{{ action('App\Http\Controllers\Admin\PaymentController@index') }}">{{ trans('messages.cancel') }}</a>
             </div>
 
         </form>
-
-@endsection
+</div>

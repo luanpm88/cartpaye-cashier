@@ -55,7 +55,7 @@ class PaystackController extends Controller
             }
 
             $request->session()->flash('alert-success', trans('cashier::messages.gateway.updated'));
-            return redirect()->action('Admin\PaymentController@index');
+            return redirect()->action('App\Http\Controllers\Admin\PaymentController@index');
         }
 
         return view('cashier::paystack.settings', [
