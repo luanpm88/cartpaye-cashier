@@ -401,15 +401,10 @@ class StripePaymentGateway implements PaymentGatewayInterface
                     "billing_details" => [
                         "address" => [
                             "city" => null,
-                            "country" => $invoice->billingCountry ? $invoice->billingCountry->code : '',
-                            "line1" => $invoice->billing_address,
                             "line2" => null,
                             "postal_code" => null,
                             "state" => null,
                         ],
-                        "email" => $invoice->billing_email,
-                        "name" => $invoice->getBillingName(),
-                        "phone" => $invoice->billing_phone,
                     ],
                 ]
             );
