@@ -5,7 +5,7 @@ namespace Acelle\Cashier\Services;
 use Acelle\Library\Contracts\PaymentGatewayInterface;
 use Acelle\Cashier\Cashier;
 use Carbon\Carbon;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -107,7 +107,7 @@ class BraintreePaymentGateway implements PaymentGatewayInterface
                     'amount' => $invoice->total(),
                     'currency' => $invoice->currency->code,
                     'description' => trans('messages.pay_invoice', [
-                        'id' => $invoice->uid,
+                        'id' => $invoice->id,
                     ]),
                 ]);
 
@@ -270,7 +270,7 @@ class BraintreePaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return \Acelle\Cashier\Cashier::lr_action("\Acelle\Cashier\Controllers\BraintreeController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 

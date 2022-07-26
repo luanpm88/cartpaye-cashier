@@ -32,7 +32,7 @@
                     new Dialog('alert', {
                         message: result.error.message,
                         ok: function() {
-                            window.location = '{{ action('SubscriptionController@index') }}';
+                            window.location = '{{ action('App\Http\Controllers\User\SubscriptionController@index') }}';
                         }
                     });
                 } else {
@@ -40,7 +40,7 @@
                         // copy
                         $.ajax({
                             url: '{{ action("\Acelle\Cashier\Controllers\StripeController@checkout", [
-                                'invoice_uid' => $invoice->uid,
+                                'invoice_uid' => $invoice->id,
                             ]) }}',
                             type: 'POST',
                             data: {
@@ -48,7 +48,7 @@
                                 payment_method_id: result.paymentIntent.payment_method,
                             }
                         }).done(function(response) {
-                            window.location = '{{ action('SubscriptionController@index') }}';
+                            window.location = '{{ action('App\Http\Controllers\User\SubscriptionController@index') }}';
                         });
                     }
                 }

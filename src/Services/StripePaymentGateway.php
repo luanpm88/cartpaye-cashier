@@ -11,7 +11,7 @@ use Acelle\Library\Contracts\PaymentGatewayInterface;
 use Carbon\Carbon;
 use Acelle\Cashier\Cashier;
 use Acelle\Library\AutoBillingData;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -119,7 +119,7 @@ class StripePaymentGateway implements PaymentGatewayInterface
             'amount' => $invoice->total(),
             'currency' => $invoice->currency->code,
             'description' => trans('messages.pay_invoice', [
-                'id' => $invoice->uid,
+                'id' => $invoice->id,
             ]),
         ]);
     }
@@ -140,7 +140,7 @@ class StripePaymentGateway implements PaymentGatewayInterface
                 // $payment_intent = \Stripe\PaymentIntent::retrieve($payment_intent_id);
 
                 $authPaymentLink = action("\Acelle\Cashier\Controllers\StripeController@paymentAuth", [
-                    'invoice_uid' => $invoice->uid,
+                    'invoice_uid' => $invoice->id,
                     'payment_intent_id' => $payment_intent_id,
                 ]);
 
@@ -220,7 +220,7 @@ class StripePaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return action("\Acelle\Cashier\Controllers\StripeController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 
@@ -368,7 +368,7 @@ class StripePaymentGateway implements PaymentGatewayInterface
             'currency' => $invoice->currency->code,
             'customer' => $stripeCustomer->id,
             'description' => trans('messages.pay_invoice', [
-                'id' => $invoice->uid,
+                'id' => $invoice->id,
             ]),
         ]);
 

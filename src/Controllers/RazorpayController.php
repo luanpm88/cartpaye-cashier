@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log as LaravelLog;
 use Acelle\Cashier\Cashier;
 use Acelle\Library\Facades\Billing;
 use Acelle\Model\Setting;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 use Acelle\Library\AutoBillingData;
@@ -89,7 +89,7 @@ class RazorpayController extends Controller
     {
         $customer = $request->user()->customer;
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
         
         // Save return url
         if ($request->return_url) {
@@ -107,7 +107,7 @@ class RazorpayController extends Controller
                 return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
             });
 
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         if ($request->isMethod('post')) {
@@ -115,11 +115,11 @@ class RazorpayController extends Controller
                 $service->charge($invoice, $request);
             } catch (\Exception $e) {    
                 $request->session()->flash('alert-error', $e->getMessage());
-                return redirect()->action('SubscriptionController@index');
+                return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
             }
 
             // Redirect to my subscription page
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         // create order
@@ -128,7 +128,7 @@ class RazorpayController extends Controller
             $customer = $service->getRazorpayCustomer($invoice);
         } catch (\Exception $e) {
             $request->session()->flash('alert-error', $e->getMessage());
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         return view('cashier::razorpay.checkout', [

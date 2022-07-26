@@ -10,7 +10,7 @@ use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -80,7 +80,7 @@ class PaypalPaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return action("\Acelle\Cashier\Controllers\PaypalController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 

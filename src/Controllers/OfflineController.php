@@ -9,7 +9,7 @@ use Acelle\Cashier\Cashier;
 use Acelle\Model\Setting;
 use Acelle\Library\Facades\Billing;
 use Acelle\Library\TransactionVerificationResult;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Model\Transaction;
 
 class OfflineController extends Controller
@@ -65,7 +65,7 @@ class OfflineController extends Controller
     public function checkout(Request $request)
     {
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($request->invoice_uid);
+        $invoice = Invoice::find($request->invoice_uid);
 
         // exceptions
         if (!$invoice->isNew()) {
@@ -78,7 +78,7 @@ class OfflineController extends Controller
                 return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
             });
 
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
         
         return view('cashier::offline.checkout', [
@@ -97,7 +97,7 @@ class OfflineController extends Controller
     public function claim(Request $request, $invoice_uid)
     {
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
 
         // exceptions
         if (!$invoice->isNew()) {
@@ -109,6 +109,6 @@ class OfflineController extends Controller
             return new TransactionVerificationResult(TransactionVerificationResult::RESULT_STILL_PENDING);
         });
         
-        return redirect()->action('SubscriptionController@index');
+        return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
     }
 }

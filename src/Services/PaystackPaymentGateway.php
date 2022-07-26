@@ -7,7 +7,7 @@ use Acelle\Library\Contracts\PaymentGatewayInterface;
 use Carbon\Carbon;
 use Acelle\Cashier\Cashier;
 use Acelle\Library\AutoBillingData;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -112,7 +112,7 @@ class PaystackPaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return \Acelle\Cashier\Cashier::lr_action("\Acelle\Cashier\Controllers\PaystackController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 
@@ -144,7 +144,7 @@ class PaystackPaymentGateway implements PaymentGatewayInterface
                     'amount' => $invoice->total(),
                     'currency' => $invoice->currency->code,
                     'description' => trans('messages.pay_invoice', [
-                        'id' => $invoice->uid,
+                        'id' => $invoice->id,
                     ]),
                     'email' => $card['email'],
                     'authorization_code' => $card['authorization_code'],

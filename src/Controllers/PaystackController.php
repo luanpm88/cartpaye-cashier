@@ -10,7 +10,7 @@ use Acelle\Cashier\Services\PaystackPaymentGateway;
 use Acelle\Library\Facades\Billing;
 use Acelle\Model\Setting;
 use Acelle\Library\AutoBillingData;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -83,7 +83,7 @@ class PaystackController extends Controller
     public function checkout(Request $request, $invoice_uid)
     {
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
         
         // Save return url
         if ($request->return_url) {
@@ -101,7 +101,7 @@ class PaystackController extends Controller
                 return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
             });
 
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         if ($service->getCard($invoice->customer)) {
@@ -120,11 +120,11 @@ class PaystackController extends Controller
                     return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
                 });
 
-                return redirect()->action('SubscriptionController@index');
+                return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
             } catch (\Exception $e) {
                 // return with error message
                 $request->session()->flash('alert-error', $e->getMessage());
-                return redirect()->action('SubscriptionController@index');
+                return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
             }
         }
 
@@ -144,7 +144,7 @@ class PaystackController extends Controller
     public function charge(Request $request, $invoice_uid)
     {
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
 
         // exceptions
         if (!$invoice->isNew()) {
@@ -154,7 +154,7 @@ class PaystackController extends Controller
         // autopay
         $service->autoCharge($invoice);
 
-        return redirect()->action('SubscriptionController@index');
+        return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
     }
 
     /**
@@ -166,6 +166,6 @@ class PaystackController extends Controller
      **/
     public function autoBillingDataUpdate(Request $request)
     {
-        return redirect()->action('SubscriptionController@index');
+        return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
     }
 }

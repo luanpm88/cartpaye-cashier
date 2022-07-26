@@ -35,7 +35,7 @@
                 <script src="https://js.paystack.co/v1/inline.js"></script> 
 
                 <form id="checkoutForm" method="POST" action="{{ \Acelle\Cashier\Cashier::lr_action('\Acelle\Cashier\Controllers\PaystackController@checkout', [
-                    'invoice_uid' => $invoice->uid
+                    'invoice_uid' => $invoice->id
                 ]) }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="reference" value="" />
@@ -71,7 +71,7 @@
                 <div class="my-4">
                     <hr>
                     <form id="cancelForm" method="POST" action="{{ action('SubscriptionController@cancelInvoice', [
-                                'invoice_uid' => $invoice->uid,
+                                'invoice_uid' => $invoice->id,
                     ]) }}">
                         {{ csrf_field() }}
                         <a href="javascript:;" onclick="$('#cancelForm').submit()">

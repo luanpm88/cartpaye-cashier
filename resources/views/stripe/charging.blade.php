@@ -31,7 +31,7 @@
                             <p class="text-muted">{!! trans('cashier::messages.stripe.checkout.processing_payment.intro') !!}</p>
                             
                             <form id="pay_now" method="POST" action="{{ \Acelle\Cashier\Cashier::lr_action('\Acelle\Cashier\Controllers\StripeController@checkout', [
-                                'invoice_uid' => $invoice->uid,
+                                'invoice_uid' => $invoice->id,
                             ]) }}">
                                 {{ csrf_field() }}
 

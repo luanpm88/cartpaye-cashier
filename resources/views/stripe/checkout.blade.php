@@ -1,29 +1,12 @@
-<html lang="en">
-    <head>
-        <title>{{ trans('cashier::messages.stripe') }}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>            
-        <link rel="stylesheet" href="{{ \Acelle\Cashier\Cashier::public_url('/vendor/acelle-cashier/css/main.css') }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-        @include('layouts.core._includes')
+@include('admin.plans._tmp_nav')
 
-        @include('layouts.core._script_vars')
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
+<script src="https://js.stripe.com/v3/"></script>
 
-        <script src="https://js.stripe.com/v3/"></script>
-    </head>
+<div class="container pt-5">
     
-    <body>
-        <div class="main-container row mt-40">
-            <div class="col-md-2"></div>
-            <div class="col-md-4 mt-40 pd-60">
-                <label class="text-semibold text-muted mb-20 mt-0">
-                    <strong>
-                        {{ trans('cashier::messages.stripe') }}
-                    </strong>
-                </label>
-                <img class="rounded" width="100%" src="{{ \Acelle\Cashier\Cashier::public_url('/vendor/acelle-cashier/image/stripe.png') }}" />
-            </div>
             <div class="col-md-4 mt-40 pd-60">
 
                 @if ($paymentMethod != null)
@@ -51,7 +34,7 @@
                         </ul>
                         
                         <form method="POST" action="{{ action("\Acelle\Cashier\Controllers\StripeController@checkout", [
-                            'invoice_uid' => $invoice->uid,
+                            'invoice_uid' => $invoice->id,
                         ]) }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="current_card" value="yes" />
@@ -77,7 +60,7 @@
                 </div>
 
                 <a
-                    href="{{ \Acelle\Cashier\Cashier::lr_action('SubscriptionController@index') }}"
+                    href="{{ \Acelle\Cashier\Cashier::lr_action('App\Http\Controllers\User\SubscriptionController@index') }}"
                     class="text-muted mt-4" style="text-decoration: underline; display: block"
                 >{{ trans('cashier::messages.stripe.return_back') }}</a>
                 
@@ -113,22 +96,17 @@
             });
 
             $('#submit').on('click', function() {
-                addButtonMask($(this));
                 stripe.confirmCardPayment('{{ $clientSecret }}', {
                     payment_method: {
                         card: card,
                         billing_details: {
-                            name: '{{ $invoice->getBillingName() }}',
+                            name: 'StripeCus',
                             "address": {
                             "city": null,
-                                "country": '{{ $invoice->billingCountry ? $invoice->billingCountry->code : '' }}',
-                                "line1": '{{ $invoice->billing_address }}',
                                 "line2": null,
                                 "postal_code": null,
                                 "state": null
                             },
-                            "email": '{{ $invoice->billing_email }}',
-                            "phone": '{{ $invoice->billing_phone }}'
                         }
                     },
                     setup_future_usage: 'off_session'
@@ -138,7 +116,6 @@
                         new Dialog('alert', {
                             message: result.error.message
                         });
-                        removeButtonMask($('#submit'));
                     } else {
                         if (result.paymentIntent.status === 'succeeded') {
                             // Show a success message to your customer
@@ -154,7 +131,7 @@
                             // copy
                             $.ajax({
                                 url: '{{ action("\Acelle\Cashier\Controllers\StripeController@checkout", [
-                                    'invoice_uid' => $invoice->uid,
+                                    'invoice_uid' => $invoice->id,
                                 ]) }}',
                                 type: 'POST',
                                 data: {
@@ -162,7 +139,7 @@
                                     payment_method_id: result.paymentIntent.payment_method,
                                 }
                             }).done(function(response) {
-                                window.location = '{{ action('SubscriptionController@index') }}';
+                                window.location = '{{ action('App\Http\Controllers\User\SubscriptionController@index') }}';
                             });
             
                         }
@@ -174,5 +151,3 @@
                 addMaskLoading(`{!! trans('cashier::messages.stripe.checkout.processing_payment.intro') !!}`);
             });
         </script>
-    </body>
-</html>

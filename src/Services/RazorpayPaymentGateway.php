@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Acelle\Library\Contracts\PaymentGatewayInterface;
 use Carbon\Carbon;
 use Acelle\Cashier\Cashier;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -71,7 +71,7 @@ class RazorpayPaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return action("\Acelle\Cashier\Controllers\RazorpayController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 
@@ -201,7 +201,7 @@ class RazorpayPaymentGateway implements PaymentGatewayInterface
         ], [
             "amount" => $this->convertPrice($invoice->total(), $invoice->currency->code),
             "currency" => $invoice->currency->code,
-            "receipt" => "rcptid_" . $invoice->uid,
+            "receipt" => "rcptid_" . $invoice->id,
             "payment_capture" => 1,
         ]);
     }

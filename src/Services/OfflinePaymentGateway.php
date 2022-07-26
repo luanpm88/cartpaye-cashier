@@ -9,7 +9,7 @@ use Stripe\Subscription as StripeSubscription;
 use Acelle\Cashier\Cashier;
 use Acelle\Library\Contracts\PaymentGatewayInterface;
 use Carbon\Carbon;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -67,7 +67,7 @@ class OfflinePaymentGateway implements PaymentGatewayInterface
     public function getCheckoutUrl($invoice) : string
     {
         return action("\Acelle\Cashier\Controllers\OfflineController@checkout", [
-            'invoice_uid' => $invoice->uid,
+            'invoice_uid' => $invoice->id,
         ]);
     }
 

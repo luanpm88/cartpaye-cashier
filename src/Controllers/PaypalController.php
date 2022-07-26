@@ -9,7 +9,7 @@ use Acelle\Cashier\Cashier;
 use Acelle\Cashier\Services\PaypalPaymentGateway;
 use Acelle\Library\Facades\Billing;
 use Acelle\Model\Setting;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 use Acelle\Library\AutoBillingData;
@@ -91,7 +91,7 @@ class PaypalController extends Controller
     {
         $customer = $request->user()->customer;
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
         
         // Save return url
         if ($request->return_url) {
@@ -109,7 +109,7 @@ class PaypalController extends Controller
                 return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
             });
 
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         if ($request->isMethod('post')) {
@@ -118,7 +118,7 @@ class PaypalController extends Controller
             ]);
 
             // return back
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         return view('cashier::paypal.checkout', [

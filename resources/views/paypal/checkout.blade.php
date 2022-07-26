@@ -36,7 +36,7 @@
                 <script>
                     var form = jQuery('<form>', {
                         'action': '{{ \Acelle\Cashier\Cashier::lr_action('\Acelle\Cashier\Controllers\PaypalController@checkout', [
-                            'invoice_uid' => $invoice->uid,
+                            'invoice_uid' => $invoice->id,
                         ]) }}',
                         'target': '_top',
                         'method': 'POST'
@@ -80,7 +80,7 @@
                 <div class="my-4">
                     <hr>
                     <form id="cancelForm" method="POST" action="{{ action('SubscriptionController@cancelInvoice', [
-                                'invoice_uid' => $invoice->uid,
+                                'invoice_uid' => $invoice->id,
                     ]) }}">
                         {{ csrf_field() }}
                         <a href="javascript:;" onclick="$('#cancelForm').submit()">

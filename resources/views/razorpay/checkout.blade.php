@@ -30,7 +30,7 @@
                 <div class="hide" style="display:none">
                     <form action="{{ \Acelle\Cashier\Cashier::lr_action('\Acelle\Cashier\Controllers\RazorpayController@checkout', [
                     '_token' => csrf_token(),
-                    'invoice_uid' => $invoice->uid,
+                    'invoice_uid' => $invoice->id,
                 ]) }}" method="POST">
 
                         <script
@@ -54,7 +54,7 @@
                 <div class="my-4">
                     <hr>
                     <form id="cancelForm" method="POST" action="{{ action('SubscriptionController@cancelInvoice', [
-                                'invoice_uid' => $invoice->uid,
+                                'invoice_uid' => $invoice->id,
                     ]) }}">
                         {{ csrf_field() }}
                         <a href="javascript:;" onclick="$('#cancelForm').submit()">

@@ -84,7 +84,7 @@ display: block;" href="{{ $service->getData($invoice)['status_url'] }}">
                 <hr>
                 <a class="" link-method="POST" link-confirm="{{ trans('messages.invoice.cancel.confirm') }}"
                     href="{{ action('SubscriptionController@cancelInvoice', [
-                        'invoice_uid' => $invoice->uid,
+                        'invoice_uid' => $invoice->id,
                     ]) }}">
                     {{ trans('messages.subscription.cancel_now_change_other_plan') }}
                 </a>

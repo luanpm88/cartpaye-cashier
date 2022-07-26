@@ -10,7 +10,7 @@ use Acelle\Cashier\Services\BraintreePaymentGateway;
 use Acelle\Library\Facades\Billing;
 use Acelle\Model\Setting;
 use Acelle\Library\AutoBillingData;
-use Acelle\Model\Invoice;
+use App\Models\Invoice;
 use Acelle\Library\TransactionVerificationResult;
 use Acelle\Model\Transaction;
 
@@ -88,7 +88,7 @@ class BraintreeController extends Controller
     {
         $customer = $request->user()->customer;
         $service = $this->getPaymentService();
-        $invoice = Invoice::findByUid($invoice_uid);
+        $invoice = Invoice::find($invoice_uid);
         
         // Save return url
         if ($request->return_url) {
@@ -106,7 +106,7 @@ class BraintreeController extends Controller
                 return new TransactionVerificationResult(TransactionVerificationResult::RESULT_DONE);
             });
 
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         // Customer has no card
@@ -123,7 +123,7 @@ class BraintreeController extends Controller
             $result = $service->autoCharge($invoice);
 
             // return back
-            return redirect()->action('SubscriptionController@index');
+            return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
         }
 
         return view('cashier::braintree.charging', [
@@ -173,7 +173,7 @@ class BraintreeController extends Controller
             if ($request->return_url) {
                 return redirect()->away($request->return_url);
             } else {
-                return redirect()->action('SubscriptionController@index');
+                return redirect()->action('App\Http\Controllers\User\SubscriptionController@index');
             }
         }
         

@@ -23,11 +23,6 @@ class CashierServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Only bootstraping the services if the application is already initialized
-        if (!isInitiated()) {
-            return;
-        }
-
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'cashier');
 
         if (!file_exists(storage_path('app/cashier/lang/en/messages.php'))) {
@@ -48,46 +43,48 @@ class CashierServiceProvider extends ServiceProvider
             __DIR__.'/../assets' => public_path('vendor/acelle-cashier'),
         ], 'public');
 
-        // register gateways
-        $paymentInstruction = Setting::get('cashier.offline.payment_instruction');
-        $offline = new OfflinePaymentGateway($paymentInstruction);
-        Billing::register($offline);
+        if (\Schema::hasTable('settings')) {
+            // register gateways
+            $paymentInstruction = Setting::get('cashier.offline.payment_instruction');
+            $offline = new OfflinePaymentGateway($paymentInstruction);
+            Billing::register($offline);
 
-        $publishableKey = Setting::get('cashier.stripe.publishable_key');
-        $secretKey = Setting::get('cashier.stripe.secret_key');
-        $stripe = new StripePaymentGateway($publishableKey, $secretKey);
-        Billing::register($stripe);
+            $publishableKey = Setting::get('cashier.stripe.publishable_key');
+            $secretKey = Setting::get('cashier.stripe.secret_key');
+            $stripe = new StripePaymentGateway($publishableKey, $secretKey);
+            Billing::register($stripe);
 
-        $environment = Setting::get('cashier.braintree.environment');
-        $merchantId = Setting::get('cashier.braintree.merchant_id');
-        $publicKey = Setting::get('cashier.braintree.public_key');
-        $privateKey = Setting::get('cashier.braintree.private_key');
-        $braintree = new BraintreePaymentGateway($environment, $merchantId, $publicKey, $privateKey);
-        Billing::register($braintree);
+            $environment = Setting::get('cashier.braintree.environment');
+            $merchantId = Setting::get('cashier.braintree.merchant_id');
+            $publicKey = Setting::get('cashier.braintree.public_key');
+            $privateKey = Setting::get('cashier.braintree.private_key');
+            $braintree = new BraintreePaymentGateway($environment, $merchantId, $publicKey, $privateKey);
+            Billing::register($braintree);
 
-        $merchantId = Setting::get('cashier.coinpayments.merchant_id');
-        $publicKey = Setting::get('cashier.coinpayments.public_key');
-        $privateKey = Setting::get('cashier.coinpayments.private_key');
-        $ipnSecret = Setting::get('cashier.coinpayments.ipn_secret');
-        $receiveCurrency = Setting::get('cashier.coinpayments.receive_currency');
-        $coinpayments = new CoinpaymentsPaymentGateway($merchantId, $publicKey, $privateKey, $ipnSecret, $receiveCurrency);
-        Billing::register($coinpayments);
+            $merchantId = Setting::get('cashier.coinpayments.merchant_id');
+            $publicKey = Setting::get('cashier.coinpayments.public_key');
+            $privateKey = Setting::get('cashier.coinpayments.private_key');
+            $ipnSecret = Setting::get('cashier.coinpayments.ipn_secret');
+            $receiveCurrency = Setting::get('cashier.coinpayments.receive_currency');
+            $coinpayments = new CoinpaymentsPaymentGateway($merchantId, $publicKey, $privateKey, $ipnSecret, $receiveCurrency);
+            Billing::register($coinpayments);
 
-        $publicKey = Setting::get('cashier.paystack.public_key');
-        $secretKey = Setting::get('cashier.paystack.secret_key');
-        $paystack = new PaystackPaymentGateway($publicKey, $secretKey);
-        Billing::register($paystack);
+            $publicKey = Setting::get('cashier.paystack.public_key');
+            $secretKey = Setting::get('cashier.paystack.secret_key');
+            $paystack = new PaystackPaymentGateway($publicKey, $secretKey);
+            Billing::register($paystack);
 
-        $environment = Setting::get('cashier.paypal.environment');
-        $clientId = Setting::get('cashier.paypal.client_id');
-        $secret = Setting::get('cashier.paypal.secret');
-        $paypal = new PaypalPaymentGateway($environment, $clientId, $secret);
-        Billing::register($paypal);
+            $environment = Setting::get('cashier.paypal.environment');
+            $clientId = Setting::get('cashier.paypal.client_id');
+            $secret = Setting::get('cashier.paypal.secret');
+            $paypal = new PaypalPaymentGateway($environment, $clientId, $secret);
+            Billing::register($paypal);
 
-        $keyId = Setting::get('cashier.razorpay.key_id');
-        $keySecret = Setting::get('cashier.razorpay.key_secret');
-        $razorpay = new RazorpayPaymentGateway($keyId, $keySecret);
-        Billing::register($razorpay);
+            $keyId = Setting::get('cashier.razorpay.key_id');
+            $keySecret = Setting::get('cashier.razorpay.key_secret');
+            $razorpay = new RazorpayPaymentGateway($keyId, $keySecret);
+            Billing::register($razorpay);
+        }
 
         Hook::register('add_translation_file', function() {
             return [

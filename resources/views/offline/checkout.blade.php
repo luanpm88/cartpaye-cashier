@@ -17,7 +17,7 @@
             <div class="d-flex align-items-center">
                 <form method="POST"
                     action="{{ \Acelle\Cashier\Cashier::lr_action('\Acelle\Cashier\Controllers\OfflineController@claim', [
-                        'invoice_uid' => $invoice->uid
+                        'invoice_uid' => $invoice->id
                     ]) }}"
                 >
                     {{ csrf_field() }}
@@ -27,10 +27,10 @@
                 </form>
 
                 <form id="cancelForm" method="POST" action="{{ action('SubscriptionController@cancelInvoice', [
-                            'invoice_uid' => $invoice->uid,
+                            'invoice_uid' => $invoice->id,
                 ]) }}">
                     {{ csrf_field() }}
-                    <a href="{{ action('SubscriptionController@index') }}">
+                    <a href="{{ action('App\Http\Controllers\User\SubscriptionController@index') }}">
                         {{ trans('cashier::messages.go_back') }}
                     </a>
                 </form>
