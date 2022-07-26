@@ -113,9 +113,7 @@
                 }).then(function(result) {
                     if (result.error) {
                         // Show error to your customer
-                        new Dialog('alert', {
-                            message: result.error.message
-                        });
+                        alert(result.error.message);
                     } else {
                         if (result.paymentIntent.status === 'succeeded') {
                             // Show a success message to your customer
@@ -125,8 +123,6 @@
 
                             // The PaymentMethod ID can be found on result.paymentIntent.payment_method
                             // console.log(result.paymentIntent);
-
-                            addMaskLoading(`{!! trans('cashier::messages.stripe.checkout.processing_payment.intro') !!}`);
 
                             // copy
                             $.ajax({
@@ -138,7 +134,7 @@
                                     _token: '{{ csrf_token() }}',
                                     payment_method_id: result.paymentIntent.payment_method,
                                 }
-                            }).done(function(response) {
+                            }).always(function(response) {
                                 window.location = '{{ action('App\Http\Controllers\User\SubscriptionController@index') }}';
                             });
             
@@ -148,6 +144,6 @@
             });
             
             $('#payWithCurrentCard').on('click', function() {
-                addMaskLoading(`{!! trans('cashier::messages.stripe.checkout.processing_payment.intro') !!}`);
+                
             });
         </script>

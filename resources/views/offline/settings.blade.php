@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-6">
                 <label for="">Payment Instruction</label>
-                <textarea name="payment_instruction" value="{{ $gateway->getPaymentInstruction() }}"></textarea>
+                <textarea name="payment_instruction">{{ $gateway->getPaymentInstruction() }}</textarea>
             </div>
         </div>
 
